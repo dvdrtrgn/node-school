@@ -18,9 +18,7 @@ function test1() {
     return c; // what if this line runs 1-3 seconds later?
   }
 
-  function thunk() {
-    return add(10, 15);
-  }
+  var thunk = util.makeThunk(add, 10, 15);
   console.log(thunk());
 }
 
@@ -30,9 +28,9 @@ function test2() {
     return c; // what if this was async??
   }
 
-  function thunk(cb) {
+  var thunk = function (cb) {
     cb(add(10, 15));
-  }
+  };
   thunk(util.log1thing);
 }
 
@@ -42,8 +40,8 @@ function test3() {
     cb(c); // what about async???
   }
 
-  var thunk = util.makeThunk(add, 10, 15);
-  thunk(util.log1thing);
+  var thunk = util.makeThunk(add, 10, 15, util.log1thing);
+  thunk();
 }
 
 function test4() {
@@ -54,7 +52,9 @@ function test4() {
   }
 
   var thunk = util.makeThunk(add, 10, 15);
-  thunk(util.log1thing);
+  var again = util.makeThunk(thunk, util.log1thing);
+  var yawwn = util.makeThunk(again);
+  util.makeThunk(yawwn)();
 }
 
 test1(), test2(), test3(), test4();
