@@ -1,3 +1,17 @@
+var util = {
+  log1thing: function (x) {
+    console.log(x);
+  },
+  makeThunk: function (fn) {
+    var args = [].slice.call(arguments, 1);
+    return function (cb) {
+      return fn.apply(null, args.concat(cb));
+    };
+  },
+};
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
 function test1() {
   function add(a, b) {
     var c = a + b;
@@ -19,9 +33,7 @@ function test2() {
   function thunk(cb) {
     cb(add(10, 15));
   }
-  thunk(function (x) {
-    console.log(x);
-  });
+  thunk(util.log1thing);
 }
 
 function test3() {
@@ -30,12 +42,8 @@ function test3() {
     cb(c); // what about async???
   }
 
-  function thunk(cb) {
-    add(10, 15, cb);
-  }
-  thunk(function (x) {
-    console.log(x);
-  });
+  var thunk = util.makeThunk(add, 10, 15);
+  thunk(util.log1thing);
 }
 
 function test4() {
@@ -45,12 +53,8 @@ function test4() {
     );
   }
 
-  function thunk(cb) {
-    add(10, 15, cb);
-  }
-  thunk(function (x) {
-    console.log(x);
-  });
+  var thunk = util.makeThunk(add, 10, 15);
+  thunk(util.log1thing);
 }
 
 test1(), test2(), test3(), test4();
