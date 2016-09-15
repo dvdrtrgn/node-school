@@ -1,20 +1,14 @@
-var util = (function () {
-  function arg2arr(args) {
-    return [].slice.call(args);
-  }
-  return {
-    log1thing: function (any) {
-      console.log(any);
-    },
-    makeThunk: function (fn) {
-      var args = arg2arr(arguments).slice(1); // collect remaining args
-      return function () { // return function that runs fn with those args
-        args = args.concat(arg2arr(arguments)); // BUT allows new args
-        return fn.apply(null, args); // apply all args to original fn
-      };
-    },
+function arg2arr(args) {
+  return [].slice.call(args);
+}
+
+function makeThunk(fn) {
+  var args = arg2arr(arguments).slice(1); //    collect remaining args
+  return function () { //                       return function that runs fn(args...)
+    args = args.concat(arg2arr(arguments)); //  BUT allows additional trailing args
+    return fn.apply(null, args); //             apply all args to original fn
   };
-}());
+}
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -24,7 +18,7 @@ function test1() {
     return c; // what if this line runs 1-3 seconds later?
   }
 
-  var thunk = util.makeThunk(add, 10, 15);
+  var thunk = makeThunk(add, 10, 15);
   console.log(thunk());
 }
 
@@ -37,7 +31,7 @@ function test2() {
   var thunk = function (cb) {
     cb(add(10, 15));
   };
-  thunk(util.log1thing);
+  thunk(console.log);
 }
 
 function test3() {
@@ -46,8 +40,8 @@ function test3() {
     cb(c); // what about async???
   }
 
-  var thunk = util.makeThunk(add, 10, 15);
-  thunk(util.log1thing);
+  var thunk = makeThunk(add, 10, 15);
+  thunk(console.log);
 }
 
 function test4() {
@@ -57,10 +51,11 @@ function test4() {
     );
   }
 
-  var thunk = util.makeThunk(add, 10);
-  var again = util.makeThunk(thunk, 15);
-  var yawwn = util.makeThunk(again, util.log1thing);
-  yawwn();
+  var thunk = makeThunk(add, 10);
+  var again = makeThunk(thunk, 15);
+  var yawwn = makeThunk(again, console.log);
+  var wrapa = makeThunk(yawwn);
+  wrapa();
 }
 
 test1(), test2(), test3(), test4();
