@@ -1,20 +1,20 @@
-# DO NOT TRASH
-This folder probably contains a git repo.
+# Node School
 
-(invisible files in a 'zero' state)
+Collect lessons into folders from these https://nodeschool.io offerings...
 
-## To view
-Copy the folder to your machine. Open Terminal.app:
+## learnyounode
+`npm install -g learnyounode`
 
-    $  cd '/path/to/local/copy' && git checkout master
-
-### UL
-* [spot link](http://site/) `(http://site/)`
-* [named link][site] `[site]`
-
-#### OL
-0. 0
-0. 0
-
-[site]: http://site/
-
+0. HELLO WORLD
+0. BABY STEPS
+0. MY FIRST I/O!
+0. MY FIRST ASYNC I/O!
+0. FILTERED LS
+0. MAKE IT MODULAR
+0. HTTP CLIENT
+0. HTTP COLLECT
+0. JUGGLING ASYNC
+0. TIME SERVER
+0. HTTP FILE SERVER
+0. HTTP UPPERCASERER
+0. HTTP JSON API SERVER
